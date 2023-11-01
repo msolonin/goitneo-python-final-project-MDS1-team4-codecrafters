@@ -5,11 +5,14 @@ For works with Address book
 """
 import re
 import calendar
+import readline
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
 from utils import Record
 from utils import Pickle
+from utils import CommandCompleter
+from utils import Commands
 
 TELEPHONE_NUMBER_LEN = 10
 pickle = Pickle()
@@ -74,7 +77,7 @@ def add_phone(contacts, name: str, phone: str):
         pickle.save_contacts(contacts)
         return f"Contact: {name} : {phone} added"
     else:
-        return f"Phone: {phone} is not correct it should contain 10 digits"
+        return f"Phone: {phone} is not correct it should contain {TELEPHONE_NUMBER_LEN} digits"
 
 
 @input_error
@@ -243,33 +246,35 @@ def main():
         ° change-address <name> <new address>
         ° close/exit""")
     while True:
+        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
-        if command in ["close", "exit"]:
+        if command in [Commands.CLOSE, Commands.EXIT]:
             print("Good bye!")
             break
-        elif command == "hello":
+        elif command == Commands.HELLO:
             print("How can I help you?")
-        elif command == "add":
+        elif command == Commands.ADD:
             print(add_phone(contacts, *args))
-        elif command == "change":
+        elif command == Commands.CHANGE:
             print(change_phone(contacts, *args))
-        elif command == "phone":
+        elif command == Commands.PHONE:
             print(get_phone(contacts, *args))
-        elif command == "all":
+        elif command == Commands.ALL:
             print(get_all(contacts))
-        elif command == "add-birthday":
+        elif command == Commands.ADD_BIRTHDAY:
             print(add_birthday(contacts, *args))
-        elif command == "show-birthday":
+        elif command == Commands.SHOW_BIRTHDAY:
             print(show_birthday(contacts, *args))
-        elif command == "birthdays":
+        elif command == Commands.BIRTHDAYS:
             print(birthdays(contacts))
-        elif command == "add-address":
+        elif command == Commands.ADD_ADDRESS:
             print(add_address(contacts, *args))
-        elif command == "show-address":
+        elif command == Commands.SHOW_ADDRESS:
             print(get_address(contacts, *args))
-        elif command == "change-address":
+        elif command == Commands.CHANGE_ADDRESS:
             print(change_address(contacts, *args))
         else:
             print("Invalid command.")

@@ -26,41 +26,6 @@ def input_error(func):
     return wrapper
 
 
-class Pickle:
-
-    NOTES = 'notes.pickle'
-    CONTACTS = 'contacts.pickle'
-
-    @staticmethod
-    def save_to_file(file_name, data):
-        with open(file_name, "wb") as _file:
-            pickle.dump(data, _file)
-
-    @staticmethod
-    def read_from_file(file_name):
-        with open(file_name, "rb") as _file:
-            content = pickle.load(_file)
-        return content
-
-    def save_notes(self, data):
-        self.save_to_file(self.NOTES, data)
-
-    def read_notes(self):
-        try:
-            return self.read_from_file(self.NOTES)
-        except FileNotFoundError:
-            return Notes()  # TODO: Class not exist, change name if it will be different name
-
-    def save_contacts(self, data):
-        self.save_to_file(self.CONTACTS, data)
-
-    def read_contacts(self):
-        try:
-            return self.read_from_file(self.CONTACTS)
-        except FileNotFoundError:
-            return AddressBook()
-
-
 class Field:
     def __init__(self, value):
         self.value = value
@@ -155,3 +120,82 @@ class Record:
         if self.birthday:
             birthday = f" birthday: {str(self.birthday)}, "
         return f"Contact name: {self.name.value},{birthday} phone: {self.phone}"
+
+
+class Pickle:
+
+    NOTES = 'notes.pickle'
+    CONTACTS = 'contacts.pickle'
+
+    @staticmethod
+    def save_to_file(file_name, data):
+        with open(file_name, "wb") as _file:
+            pickle.dump(data, _file)
+
+    @staticmethod
+    def read_from_file(file_name):
+        with open(file_name, "rb") as _file:
+            content = pickle.load(_file)
+        return content
+
+    def save_notes(self, data):
+        self.save_to_file(self.NOTES, data)
+
+    def read_notes(self):
+        try:
+            return self.read_from_file(self.NOTES)
+        except FileNotFoundError:
+            return Notes()  # TODO: Class not exist, change name if it will be different name
+
+    def save_contacts(self, data):
+        self.save_to_file(self.CONTACTS, data)
+
+    def read_contacts(self):
+        try:
+            return self.read_from_file(self.CONTACTS)
+        except FileNotFoundError:
+            return AddressBook()
+
+
+class CommandCompleter:
+
+    def __init__(self, options):
+        self.options = sorted(options)
+        self.matches = []
+
+    def complete(self, text, state):
+        response = None
+        if state == 0:
+            if text:
+                self.matches = [_ for _ in self.options if _ and _.startswith(text)]
+            else:
+                self.matches = self.options[:]
+        try:
+            response = self.matches[state]
+        except IndexError:
+            response = None
+        return response
+
+
+class Commands:
+    ADD = 'add'
+    CHANGE = 'change'
+    PHONE = 'phone'
+    ALL = 'all'
+    ADD_BIRTHDAY = 'add-birthday'
+    SHOW_BIRTHDAY = 'show-birthday'
+    BIRTHDAYS = 'birthdays'
+    ADD_ADDRESS = 'add-address'
+    SHOW_ADDRESS = 'show-address'
+    CHANGE_ADDRESS = 'change-address'
+    CLOSE = 'close'
+    EXIT = 'exit'
+    HELLO = 'hello'
+
+    @classmethod
+    def all_keys(cls):
+        return [_ for _ in dir(Commands) if not _.startswith('_') and _.isupper()]
+
+    @classmethod
+    def all_values(cls):
+        return [getattr(cls, _) for _ in cls.all_keys()]
