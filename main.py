@@ -116,6 +116,22 @@ def get_all(contacts):
         return '\n'.join([f"{v}" for k, v in contacts.data.items()])
     else:
         return "Data is empty, nothing to show"
+    
+
+@input_error
+def add_address(contacts, name: str, address: str):
+    contacts.data[name].add_address(address)
+    return f"Address for {name} : {address} added"
+
+
+@input_error
+def get_address(contacts, name: str):
+    return contacts[name].get_address()
+
+@input_error
+def change_address(contacts, name: str, address: str):
+    contacts.data[name].add_address(address)
+    return f"Address for {name} : {address} changed"
 
 
 @input_error
@@ -217,6 +233,9 @@ def main():
         ° add-birthday <name> <birthday(in format DD.MM.YYYY)>
         ° show-birthday <name>        
         ° birthdays
+        ° add-address <name> <address>
+        ° show-address <name>
+        ° change-address <name> <new address>
         ° close/exit""")
     while True:
         user_input = input("Enter a command: ")
@@ -241,6 +260,12 @@ def main():
             print(show_birthday(contacts, *args))
         elif command == "birthdays":
             print(birthdays(contacts))
+        elif command == "add-address":
+            print(add_address(contacts, *args))
+        elif command == "show-address":
+            print(get_address(contacts, *args))
+        elif command == "change-address":
+            print(change_address(contacts, *args))
         else:
             print("Invalid command.")
 

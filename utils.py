@@ -46,6 +46,10 @@ class AddressBook(UserDict):
     pass
 
 
+class Address(Field):
+    pass
+
+
 class Birthday(Field):
 
     date_format = "%d.%m.%Y"
@@ -60,13 +64,14 @@ class Birthday(Field):
             return datetime.strptime(date, Birthday.date_format).date()
         except Exception:
             return None
-
+        
 
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phone = None
         self.birthday = None
+        self.address = None
 
     def add_phone(self, phone: str):
         """ Method for add phone
@@ -81,11 +86,17 @@ class Record:
         """
         self.birthday = Birthday(birthday)
 
+    def add_address(self, address: str):
+        self.address = Address(address)
+
     def edit_phone(self, phone: str):
         """ Method for edit phone number
         :param phone: phone in format +3***, or 323***
         """
         self.add_phone(phone)
+
+    def edit_address(self, address: str):
+        self.add_address(address)
 
     def get_phone(self):
         """ getter for phone number
@@ -100,6 +111,9 @@ class Record:
         :rtype: str
         """
         return self.birthday.value
+    
+    def get_address(self):
+        return self.address.value
 
     def __str__(self):
         birthday = ''
