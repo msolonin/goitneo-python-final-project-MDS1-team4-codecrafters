@@ -15,6 +15,7 @@ from utils import CommandCompleter
 from utils import Commands
 
 TELEPHONE_NUMBER_LEN = 10
+EMAIL_MAX_LEN = 50
 pickle = Pickle()
 
 
@@ -53,6 +54,15 @@ def _get_phone_number(phone: str):
     _len = len(_phone)
     if _len == TELEPHONE_NUMBER_LEN:
         return ''.join(_phone)
+    else:
+        return None
+    
+
+def _get_valid_email(email: str):
+    _email = re.findall(r"[A-Za-z0-9!#$%&'r;+-.=?^^_`{}½~]+@[A-Za-z0-9]+(\.[A-Za-z]{2,})+", email)
+    _len = len(email)
+    if _len <= EMAIL_MAX_LEN:
+        return ''.join(_email)
     else:
         return None
 
@@ -127,6 +137,7 @@ def get_all(contacts):
 @input_error
 def add_address(contacts, name: str, address: str):
     contacts.data[name].add_address(address)
+    pickle.save_contacts(contacts)
     return f"Address for {name} : {address} added"
 
 
@@ -138,7 +149,36 @@ def get_address(contacts, name: str):
 @input_error
 def change_address(contacts, name: str, address: str):
     contacts.data[name].add_address(address)
+    pickle.save_contacts(contacts)
     return f"Address for {name} : {address} changed"
+
+
+@input_error
+def add_email(contacts, name: str, email: str):
+    _email = _get_valid_email(email)
+    if _email:
+        contacts.data[name].add_email(email)
+        pickle.save_contacts(contacts)
+        return f"Email for: {name} : {email} added"
+    else:
+        return f"Email: {email} is not correct"
+
+
+@input_error
+def change_email(contacts, name: str, email: str):
+    _email = _get_valid_email(email)
+    if _email:
+        contacts.data[name].edit_email(email)
+        pickle.save_contacts(contacts)
+        return f"Email for: {name} : {email} changed"
+    else:
+        return f"Email: {email} is not correct"
+
+
+
+@input_error
+def get_email(contacts, name: str):
+    return contacts[name].get_email()
 
 
 @input_error
@@ -244,6 +284,9 @@ def main():
         ° add-address <name> <address>
         ° show-address <name>
         ° change-address <name> <new address>
+        ° add-email <name> <email>
+        ° show-email <name>
+        ° change-email <name> <new email>
         ° close/exit""")
     while True:
         readline.set_completer(CommandCompleter(Commands.all_values()).complete)
@@ -276,6 +319,12 @@ def main():
             print(get_address(contacts, *args))
         elif command == Commands.CHANGE_ADDRESS:
             print(change_address(contacts, *args))
+        elif command == "add-email":
+            print(add_email(contacts, *args))
+        elif command == "show-email":
+            print(get_email(contacts, *args))
+        elif command == "change-email":
+            print(change_email(contacts, *args))
         else:
             print("Invalid command.")
 
