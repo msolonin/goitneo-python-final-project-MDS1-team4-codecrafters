@@ -131,6 +131,7 @@ def add_address(contacts, name: str, address: str):
 def get_address(contacts, name: str):
     return contacts[name].get_address()
 
+
 @input_error
 def change_address(contacts, name: str, address: str):
     contacts.data[name].add_address(address)
