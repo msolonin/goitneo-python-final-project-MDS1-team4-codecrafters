@@ -8,10 +8,11 @@ import calendar
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
-from utils import AddressBook
 from utils import Record
+from utils import Pickle
 
 TELEPHONE_NUMBER_LEN = 10
+pickle = Pickle()
 
 
 @input_error
@@ -70,6 +71,7 @@ def add_phone(contacts, name: str, phone: str):
         record = Record(name)
         record.add_phone(phone)
         contacts.update(**{record.name.value: record})
+        pickle.save_contacts(contacts)
         return f"Contact: {name} : {phone} added"
     else:
         return f"Phone: {phone} is not correct it should contain 10 digits"
@@ -89,6 +91,7 @@ def change_phone(contacts, name: str, phone: str):
     _phone = _get_phone_number(phone)
     if _phone:
         contacts.data[name].edit_phone(phone)
+        pickle.save_contacts(contacts)
         return f"Contact: {name} : {phone} changed"
     else:
         return f"Phone: {phone} is not correct it should contain 10 digits"
@@ -148,6 +151,7 @@ def add_birthday(contacts, name: str, birthday_date: str):
     result = Birthday.convert_date(birthday_date)
     if result:
         contacts.data[name].add_birthday(birthday_date)
+        pickle.save_contacts(contacts)
         return f"Birthday for {name} : {birthday_date} added"
     else:
         return f"Please use correct date format {Birthday.date_format}, instead of {birthday_date}"
@@ -222,7 +226,7 @@ def parse_input(user_input):
 def main():
     """ Main method for execution, start point
     """
-    contacts = AddressBook()
+    contacts = pickle.read_contacts()
     print("""Welcome to the assistant bot!
     Available commands:
         ° hello

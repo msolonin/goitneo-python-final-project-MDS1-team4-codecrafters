@@ -2,7 +2,7 @@
 """
 Utils, functions, classes for use it in main.py
 """
-
+import pickle
 from datetime import datetime
 from collections import UserDict
 
@@ -21,9 +21,44 @@ def input_error(func):
             return "Could not show, list of birthdays empty"
         except ValueError:
             return "Please add command"
-        except:
+        except Exception:
             print(f"Unexpected action: in def {func.__name__}()")
     return wrapper
+
+
+class Pickle:
+
+    NOTES = 'notes.pickle'
+    CONTACTS = 'contacts.pickle'
+
+    @staticmethod
+    def save_to_file(file_name, data):
+        with open(file_name, "wb") as _file:
+            pickle.dump(data, _file)
+
+    @staticmethod
+    def read_from_file(file_name):
+        with open(file_name, "rb") as _file:
+            content = pickle.load(_file)
+        return content
+
+    def save_notes(self, data):
+        self.save_to_file(self.NOTES, data)
+
+    def read_notes(self):
+        try:
+            return self.read_from_file(self.NOTES)
+        except FileNotFoundError:
+            return Notes()  # TODO: Class not exist, change name if it will be different name
+
+    def save_contacts(self, data):
+        self.save_to_file(self.CONTACTS, data)
+
+    def read_contacts(self):
+        try:
+            return self.read_from_file(self.CONTACTS)
+        except FileNotFoundError:
+            return AddressBook()
 
 
 class Field:
