@@ -5,7 +5,7 @@ For works with Address book
 """
 import re
 import calendar
-#import readline
+import readline
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
@@ -375,8 +375,8 @@ def main():
         ° edit <name>
         ° close/exit""")
     while True:
-        #readline.set_completer(CommandCompleter(Commands.all_values()).complete)
-        #readline.parse_and_bind('tab: complete')
+        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
