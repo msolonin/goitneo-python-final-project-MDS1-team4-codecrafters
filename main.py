@@ -5,7 +5,7 @@ For works with Address book
 """
 import re
 import calendar
-import readline
+#import readline
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
@@ -307,7 +307,37 @@ def birthdays(contacts):
             return "No birthdays on next week"
     else:
         return "Empty birthday list"
+    
 
+@input_error
+def edit_record(contacts, name: str):
+    if find(contacts, name):
+        user_input = input(f"""What do you want to edit for {name}:
+            ° phone <new phone>
+            ° birthday <new bithday>
+            ° address <new address>
+            ° email <new email>
+            ° back
+            >>>""")
+        command, *args = parse_input(user_input)
+        args = [name, *args]
+        if command == "phone":
+            return change_phone(contacts, *args)
+        elif command == "birthday":
+            return add_birthday(contacts, *args)
+        elif command == "address":
+            return change_address(contacts, *args)
+        elif command == "email":
+            return change_email(contacts, *args)
+        elif command == "back":
+            return ("Returned to the main")  
+        else:
+            return "Invalid command."
+    else:
+        return "Name is not present in address book"
+          
+            
+        
 
 @input_error
 def parse_input(user_input):
@@ -342,10 +372,11 @@ def main():
         ° add-email <name> <email>
         ° show-email <name>
         ° change-email <name> <new email>
+        ° edit <name>
         ° close/exit""")
     while True:
-        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
-        readline.parse_and_bind('tab: complete')
+        #readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        #readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
@@ -380,6 +411,8 @@ def main():
             print(get_email(contacts, *args))
         elif command == Commands.CHANGE_EMAIL:
             print(change_email(contacts, *args))
+        elif command == Commands.EDIT:
+            print(edit_record(contacts, *args))
         else:
             print("Invalid command.")
 
