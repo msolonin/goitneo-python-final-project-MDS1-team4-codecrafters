@@ -312,13 +312,14 @@ def birthdays(contacts):
 
 @input_error
 def add_note(notes, name: str, *args):
-    text = str(args)
+    text = ' '.join(args)
     notes.add_note(name, text)
     pickle.save_notes(notes)
     return 'Note added'
 
 @input_error
-def add_tags(notes, name: str, tags):
+def add_tags(notes, name: str, *args):
+    tags = ' '.join(args)
     notes.add_tags(name, tags)
     pickle.save_notes(notes)
     return 'Tags added'
@@ -334,13 +335,18 @@ def delete_note(notes, name: str):
     return 'Tags added'
 
 @input_error
-def edit_note(notes, name: str, new_text: str):
+def edit_note(notes, name: str,  *args):
+    new_text = ' '.join(args)
     notes.edit_note(name, new_text)
     pickle.save_notes(notes)
 
 @input_error
 def find_notes_by_tag(notes, tag: str):
-    return notes.find_notes_by_tag(tag)
+    for name, data in notes.find_notes_by_tag(tag).items():
+        print(f"Note's name: {name}")
+        print(f"Tags: {', '.join(data['tags'])}")
+        print(f"Text: {data['text']}")
+        print() 
 
 @input_error
 def sort_notes(notes):
@@ -431,9 +437,9 @@ def main():
         elif command == Commands.EDIT_NOTE:
             edit_note(notes,*args)
         elif command == Commands.FIND_NOTE:
-            print(find_note(notes,*args[0]))
+            print(find_note(notes,*args))
         elif command == Commands.DELETE_NOTE:
-            delete_note(notes,*args[0])
+            delete_note(notes,*args)
         elif command == Commands.FIND_NOTES_BY_TAGS:
             print(find_notes_by_tag(notes, *args))
         elif command == Commands.SORT_NOTES:
