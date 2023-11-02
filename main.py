@@ -46,7 +46,7 @@ def delete(contacts, name: str):
 
 def _get_phone_number(phone: str):
     """ Static method for get phone number if it have 10 digits, or none if not
-    :param phone: phone number
+    :param phone: pho ne number
     :type phone: str
     :return: phone number or None
     :rtype: str or None
