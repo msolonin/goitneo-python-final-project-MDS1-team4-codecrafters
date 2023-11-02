@@ -336,6 +336,42 @@ def birthdays(contacts: AddressBook):
             return "No birthdays on next week"
     else:
         return "Empty birthday list"
+    
+
+@input_error
+def edit_record(contacts: AddressBook, name: str):
+    """ Method for edit record
+    :param contacts: AddressBook
+    :type contacts: dict of contacts
+    :param name: name of contact
+    :type name: str
+    :return: str representation of cmd
+    :rtype: str
+    """
+    if find_contact(contacts, name):
+        user_input = input(f"""What do you want to edit for {name}:
+            ° phone <new phone>
+            ° birthday <new birthday>
+            ° address <new address>
+            ° email <new email>
+            ° back
+            >>>""")
+        command, *args = parse_input(user_input)
+        args = [name, *args]
+        if command == "phone":
+            return change_phone(contacts, *args)
+        elif command == "birthday":
+            return add_birthday(contacts, *args)
+        elif command == "address":
+            return change_address(contacts, *args)
+        elif command == "email":
+            return change_email(contacts, *args)
+        elif command == "back":
+            return "Returned to the main"
+        else:
+            return "Invalid command."
+    else:
+        return "Name is not present in address book"
 
 
 @input_error
@@ -505,6 +541,7 @@ def main():
         ° add-email <name> <email>
         ° show-email <name>
         ° change-email <name> <new email>
+        ° edit <name>
         ° delete-profile <name>
         ° close/exit""")
     while True:
@@ -565,6 +602,8 @@ def main():
             find_notes_by_tag(notes, *args)
         elif command == Commands.SORT_NOTES:
             sort_notes(notes)
+        elif command == Commands.EDIT:
+            print(edit_record(contacts, *args))
         else:
             print("Invalid command.")
 

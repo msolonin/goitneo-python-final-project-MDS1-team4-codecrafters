@@ -323,6 +323,7 @@ class Commands:
     SHOW_EMAIL = 'show-email'
     CHANGE_EMAIL = 'change-email'
     DELETE = 'delete'
+    EDIT = 'edit'
     CLOSE = 'close'
     EXIT = 'exit'
     HELLO = 'hello'
