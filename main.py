@@ -416,7 +416,11 @@ def sort_notes(notes: Notes):
         print(f"Text: {data['text']}\n")
 
 
-def upcoming_birthday(contacts, n_of_days: int):
+def upcoming_birthday(contacts, n_of_days: str):
+    """ Method to show all birthdays in n days if exist
+    :return: names of users who has birthday in n days
+    :rtype: str
+    """
 
     today = datetime.today().date()
     days = timedelta(days=int(n_of_days))
