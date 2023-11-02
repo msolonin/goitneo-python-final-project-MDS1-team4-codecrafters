@@ -1,4 +1,4 @@
-# Bot from CodeCrafters team
+![image](https://yt3.googleusercontent.com/RweKi315cTNfg097-T7DwNv0BnVUQFh0vaZcVrcPXC9DsHKumvNwwrwEavYWnqW6rYKnNootAEQ=s900-c-k-c0x00ffffff-no-rj)
 
 # Программа бот, котра підтримуе наступні списки команд:
 
@@ -17,5 +17,3 @@
     change-email [ім'я] [новий email]: Змінити email для вказаного контакту.
     hello: Отримати вітання від бота.
     close або exit: Закрити програму.
-
-![image](https://user-images.githubusercontent.com/37078272/270381693-90d0e16c-f2e7-47c3-a80d-d6217ec77097.png)
