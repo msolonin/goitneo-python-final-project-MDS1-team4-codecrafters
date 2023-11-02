@@ -92,9 +92,18 @@ class Record:
         self.birthday = Birthday(birthday)
 
     def add_address(self, address: str):
+        """ Add address
+        :param address: Address in free format
+        :type address: str
+        """
         self.address = Address(address)
 
     def add_email(self, email: str):
+        """ Add email
+        :param email: Email in format xxx@xxx.xxx
+        :type email: str
+
+        """
         self.email = Email(email)
 
     def edit_phone(self, phone: str):
@@ -104,9 +113,17 @@ class Record:
         self.add_phone(phone)
 
     def edit_address(self, address: str):
+        """ Method for edit address
+        :param address: Edit address in free format
+        :type address: str
+        """
         self.add_address(address)
 
     def edit_email(self, email: str):
+        """ Method for edit email
+        :param email:  Email in format xxx@xxx.xxx
+        :type email: str
+        """
         self.add_email(email)
 
     def get_phone(self):
@@ -124,12 +141,24 @@ class Record:
         return self.birthday.value
     
     def get_address(self):
+        """ Method for get Record address
+        :return: Current contact address
+        :rtype: str
+        """
         return self.address.value
     
     def get_email(self):
+        """ Method for get current Record email
+        :return: Current contact email
+        :rtype: str
+        """
         return self.email.value
 
     def __str__(self):
+        """ Str representation of Record
+        :return: Str representation
+        :rtype: str
+        """
         birthday = ''
         if self.birthday:
             birthday = f" birthday: {str(self.birthday)}, "
@@ -202,6 +231,9 @@ class Commands:
     ADD_ADDRESS = 'add-address'
     SHOW_ADDRESS = 'show-address'
     CHANGE_ADDRESS = 'change-address'
+    ADD_EMAIL = 'add-email'
+    SHOW_EMAIL = 'show-email'
+    CHANGE_EMAIL = 'change-email'
     CLOSE = 'close'
     EXIT = 'exit'
     HELLO = 'hello'
