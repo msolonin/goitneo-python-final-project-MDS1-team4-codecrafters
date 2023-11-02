@@ -64,7 +64,7 @@ class Birthday(Field):
             return datetime.strptime(date, Birthday.date_format).date()
         except Exception:
             return None
-        
+
 
 class Record:
     def __init__(self, name):
@@ -111,7 +111,7 @@ class Record:
         :rtype: str
         """
         return self.birthday.value
-    
+
     def get_address(self):
         return self.address.value
 
@@ -167,7 +167,8 @@ class CommandCompleter:
         response = None
         if state == 0:
             if text:
-                self.matches = [_ for _ in self.options if _ and _.startswith(text)]
+                self.matches = [
+                    _ for _ in self.options if _ and _.startswith(text)]
             else:
                 self.matches = self.options[:]
         try:
@@ -185,9 +186,11 @@ class Commands:
     ADD_BIRTHDAY = 'add-birthday'
     SHOW_BIRTHDAY = 'show-birthday'
     BIRTHDAYS = 'birthdays'
+    UPCOMING_BIRTHDAY = 'upcoming-birthday'
     ADD_ADDRESS = 'add-address'
     SHOW_ADDRESS = 'show-address'
     CHANGE_ADDRESS = 'change-address'
+    DELETE = 'delete'
     CLOSE = 'close'
     EXIT = 'exit'
     HELLO = 'hello'

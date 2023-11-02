@@ -6,7 +6,7 @@ For works with Address book
 import re
 import calendar
 import readline
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils import input_error
 from utils import Birthday
 from utils import Record
@@ -39,7 +39,9 @@ def delete(contacts, name: str):
     :return: Record
     :rtype: object
     """
-    return contacts.pop(name)
+    deleted_contact = contacts.pop(name)
+    pickle.save_contacts(contacts)
+    return f"{deleted_contact} deleted."
 
 
 def _get_phone_number(phone: str):
@@ -49,7 +51,7 @@ def _get_phone_number(phone: str):
     :return: phone number or None
     :rtype: str or None
     """
-    _phone = re.findall(r"[\+\(]?[1-9]", phone)
+    _phone = re.findall(r"[\+\(]?\d", phone)
     _len = len(_phone)
     if _len == TELEPHONE_NUMBER_LEN:
         return ''.join(_phone)
@@ -122,7 +124,7 @@ def get_all(contacts):
         return '\n'.join([f"{v}" for k, v in contacts.data.items()])
     else:
         return "Data is empty, nothing to show"
-    
+
 
 @input_error
 def add_address(contacts, name: str, address: str):
@@ -188,9 +190,11 @@ def birthdays(contacts):
             birthday = user.birthday.date_object
             birthday_this_year = birthday.replace(year=today.year)
             if birthday_this_year < today:
-                birthday_this_year = birthday_this_year.replace(year=today.year + 1)
+                birthday_this_year = birthday_this_year.replace(
+                    year=today.year + 1)
             else:
-                birthday_this_year = birthday_this_year.replace(year=today.year)
+                birthday_this_year = birthday_this_year.replace(
+                    year=today.year)
             delta_days = (birthday_this_year - today).days
             if delta_days < days_in_week:
                 weekday = birthday_this_year.weekday()
@@ -210,6 +214,31 @@ def birthdays(contacts):
             return "\n".join(print_result)
         else:
             return "No birthdays on next week"
+    else:
+        return "Empty birthday list"
+
+
+@input_error
+def upcoming_birthday(contacts, n_of_days: int):
+
+    today = datetime.today().date()
+    days = timedelta(days=int(n_of_days))
+    upcoming_birthday = today + days
+
+    if contacts.data:
+        birthdays_on_that_day = []
+        for user in contacts.data.values():
+            birthday = user.birthday.date_object
+            birthday_this_year = birthday.replace(year=today.year)
+            if upcoming_birthday == birthday_this_year:
+                birthdays_on_that_day.append(str(user.name))
+
+        if birthdays_on_that_day:
+            formatted_date = upcoming_birthday.strftime("%d.%m.%Y")
+            return f"{', '.join(birthdays_on_that_day)} have birthday on {formatted_date}"
+        else:
+            formatted_date = upcoming_birthday.strftime("%d.%m.%Y")
+            return f"No birthdays on {formatted_date}"
     else:
         return "Empty birthday list"
 
@@ -241,12 +270,15 @@ def main():
         ° add-birthday <name> <birthday(in format DD.MM.YYYY)>
         ° show-birthday <name>        
         ° birthdays
+        ° upcoming_birthday <number_of_days>
         ° add-address <name> <address>
         ° show-address <name>
         ° change-address <name> <new address>
+        ° delete-profile <name> 
         ° close/exit""")
     while True:
-        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.set_completer(CommandCompleter(
+            Commands.all_values()).complete)
         readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
@@ -264,12 +296,16 @@ def main():
             print(get_phone(contacts, *args))
         elif command == Commands.ALL:
             print(get_all(contacts))
+        elif command == Commands.DELETE:
+            print(delete(contacts, *args))
         elif command == Commands.ADD_BIRTHDAY:
             print(add_birthday(contacts, *args))
         elif command == Commands.SHOW_BIRTHDAY:
             print(show_birthday(contacts, *args))
         elif command == Commands.BIRTHDAYS:
             print(birthdays(contacts))
+        elif command == Commands.UPCOMING_BIRTHDAY:
+            print(upcoming_birthday(contacts, *args))
         elif command == Commands.ADD_ADDRESS:
             print(add_address(contacts, *args))
         elif command == Commands.SHOW_ADDRESS:
