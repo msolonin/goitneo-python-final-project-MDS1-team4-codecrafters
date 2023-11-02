@@ -173,6 +173,46 @@ class Record:
         return f"Contact name: {self.name.value},{birthday} phone: {self.phone}"
 
 
+class Notes(UserDict):
+    def add_note(self, name, text):
+        self.data[name] = {"text": text, "tags": []}
+
+    def add_tags(self, name, tags):
+        self.data[name]["tags"] += tags.split(" ")
+
+    def find_note(self, name):
+        if name in self.data:
+            return f"Note`s name: {name},\ntags: {' '.join(t for t in self.data[name]['tags'])};\ntext: {self.data[name]['text']}"
+
+    def delete_note(self, name):
+        if name in self.data:
+            del self.data[name]
+            return True
+        else:
+            return False
+
+    def edit_note(self, name, new_text):
+        if name in self.data:
+            self.data[name]["text"] = new_text
+            return True
+        else:
+            return False
+
+    def find_notes_by_tag(self, tag):
+        matching_notes = dict()
+        for name, data in self.data.items():
+            tags = data["tags"]
+            if tag in tags:
+                matching_notes[name] = data
+        return matching_notes
+
+    def sort_notes(self):
+        sorted_notes = sorted(
+            self.data.items(), key=lambda item: (-len(item[1]["tags"]), item[0])
+        )
+        return dict(sorted_notes)
+    
+
 class Pickle:
 
     NOTES = 'notes.pickle'

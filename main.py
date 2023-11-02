@@ -5,7 +5,7 @@ For works with Address book
 """
 import re
 import calendar
-import readline
+#import readline
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
@@ -13,6 +13,7 @@ from utils import Record
 from utils import Pickle
 from utils import CommandCompleter
 from utils import Commands
+from utils import Notes
 
 TELEPHONE_NUMBER_LEN = 10
 EMAIL_MAX_LEN = 50
@@ -310,6 +311,47 @@ def birthdays(contacts):
 
 
 @input_error
+def add_note(notes, name: str, *args):
+    text = str(args)
+    notes.add_note(name, text)
+    pickle.save_notes(notes)
+    return 'Note added'
+
+@input_error
+def add_tags(notes, name: str, tags):
+    notes.add_tags(name, tags)
+    pickle.save_notes(notes)
+    return 'Tags added'
+
+@input_error
+def find_note(notes, name: str):
+    return notes.find_note(name)
+
+@input_error
+def delete_note(notes, name: str):
+    notes.delete_note(name)
+    pickle.save_notes(notes)
+    return 'Tags added'
+
+@input_error
+def edit_note(notes, name: str, new_text: str):
+    notes.edit_note(name, new_text)
+    pickle.save_notes(notes)
+
+@input_error
+def find_notes_by_tag(notes, tag: str):
+    return notes.find_notes_by_tag(tag)
+
+@input_error
+def sort_notes(notes):
+    for name, data in notes.sort_notes().items():
+        print(f"Note's name: {name}")
+        print(f"Tags: {', '.join(data['tags'])}")
+        print(f"Text: {data['text']}")
+        print() 
+
+
+@input_error
 def parse_input(user_input):
     """ Method for parse cmd input
     :param user_input:
@@ -326,6 +368,7 @@ def main():
     """ Main method for execution, start point
     """
     contacts = pickle.read_contacts()
+    notes = pickle.read_notes()
     print("""Welcome to the assistant bot!
     Available commands:
         ° hello
@@ -344,9 +387,9 @@ def main():
         ° change-email <name> <new email>
         ° close/exit""")
     while True:
-        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
-        readline.set_completer_delims(' ')
-        readline.parse_and_bind('tab: complete')
+        #readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        #readline.set_completer_delims(' ')
+        #readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
@@ -381,6 +424,20 @@ def main():
             print(get_email(contacts, *args))
         elif command == Commands.CHANGE_EMAIL:
             print(change_email(contacts, *args))
+        elif command == Commands.ADD_NOTE:
+            print(add_note(notes, *args))
+        elif command == Commands.ADD_TAGS:
+            add_tags(notes, *args)
+        elif command == Commands.EDIT_NOTE:
+            edit_note(notes,*args)
+        elif command == Commands.FIND_NOTE:
+            print(find_note(notes,*args[0]))
+        elif command == Commands.DELETE_NOTE:
+            delete_note(notes,*args[0])
+        elif command == Commands.FIND_NOTES_BY_TAGS:
+            print(find_notes_by_tag(notes, *args))
+        elif command == Commands.SORT_NOTES:
+            sort_notes(notes)
         else:
             print("Invalid command.")
 
