@@ -307,6 +307,13 @@ class Commands:
     CLOSE = 'close'
     EXIT = 'exit'
     HELLO = 'hello'
+    ADD_NOTE = "add-note"
+    ADD_TAGS = "add-tags"
+    FIND_NOTE = "find-note"
+    DELETE_NOTE = "delete-note"
+    EDIT_NOTE = "edit-note"
+    FIND_NOTES_BY_TAGS = "find-by-tag"
+    SORT_NOTES = "show-sorted-notes"
 
     @classmethod
     def all_keys(cls):
