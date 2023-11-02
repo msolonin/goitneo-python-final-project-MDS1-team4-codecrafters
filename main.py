@@ -136,6 +136,16 @@ def get_all(contacts):
 
 @input_error
 def add_address(contacts, name: str, address: str):
+    """ Method for add Address
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :param address: Address of contact
+    :type address: str
+    :return: Representation string of add
+    :rtype: str
+    """
     contacts.data[name].add_address(address)
     pickle.save_contacts(contacts)
     return f"Address for {name} : {address} added"
@@ -143,11 +153,29 @@ def add_address(contacts, name: str, address: str):
 
 @input_error
 def get_address(contacts, name: str):
+    """ Method for get address
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :return: Contact address
+    :rtype: str
+    """
     return contacts[name].get_address()
 
 
 @input_error
 def change_address(contacts, name: str, address: str):
+    """ Method for Change address
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :param address: Address of contact
+    :type address: str
+    :return: Representation string for change
+    :rtype: str
+    """
     contacts.data[name].add_address(address)
     pickle.save_contacts(contacts)
     return f"Address for {name} : {address} changed"
@@ -155,6 +183,16 @@ def change_address(contacts, name: str, address: str):
 
 @input_error
 def add_email(contacts, name: str, email: str):
+    """ Method for add Email
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :param email: email of contact
+    :type email: str
+    :return: Representation string for add email
+    :rtype: str
+    """
     _email = _get_valid_email(email)
     if _email:
         contacts.data[name].add_email(email)
@@ -166,6 +204,16 @@ def add_email(contacts, name: str, email: str):
 
 @input_error
 def change_email(contacts, name: str, email: str):
+    """ Method for change Email
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :param email: email of contact
+    :type email: str
+    :return: Representation string for change email
+    :rtype: str
+    """
     _email = _get_valid_email(email)
     if _email:
         contacts.data[name].edit_email(email)
@@ -175,9 +223,16 @@ def change_email(contacts, name: str, email: str):
         return f"Email: {email} is not correct"
 
 
-
 @input_error
 def get_email(contacts, name: str):
+    """ Method for get Email from contact
+    :param contacts: Record
+    :type contacts: class
+    :param name: record name
+    :type name: str
+    :return: Representation string of contact email
+    :rtype: str
+    """
     return contacts[name].get_email()
 
 
@@ -319,11 +374,11 @@ def main():
             print(get_address(contacts, *args))
         elif command == Commands.CHANGE_ADDRESS:
             print(change_address(contacts, *args))
-        elif command == "add-email":
+        elif command == Commands.ADD_EMAIL:
             print(add_email(contacts, *args))
-        elif command == "show-email":
+        elif command == Commands.SHOW_EMAIL:
             print(get_email(contacts, *args))
-        elif command == "change-email":
+        elif command == Commands.CHANGE_EMAIL:
             print(change_email(contacts, *args))
         else:
             print("Invalid command.")
