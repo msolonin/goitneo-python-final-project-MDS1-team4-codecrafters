@@ -60,10 +60,18 @@ class Birthday(Field):
 
     @property
     def date_object(self):
+        """ Getter for date
+        """
         return self.convert_date(self.value)
 
     @staticmethod
     def convert_date(date: str):
+        """ Method for convert date in date object
+        :param date: date in %d.%m.%Y format
+        :type date: str
+        :return: date object
+        :rtype: datetime
+        """
         try:
             return datetime.strptime(date, Birthday.date_format).date()
         except Exception:
@@ -172,28 +180,48 @@ class Pickle:
 
     @staticmethod
     def save_to_file(file_name, data):
+        """ Method for save pickled data in file
+        :param file_name: name of file
+        :type file_name: str
+        :param data: any kind of data
+        :type data: any
+        """
         with open(file_name, "wb") as _file:
             pickle.dump(data, _file)
 
     @staticmethod
     def read_from_file(file_name):
+        """ Method for read data from file
+        :param file_name: name of file
+        :type file_name: str
+        :return: data
+        :rtype: any
+        """
         with open(file_name, "rb") as _file:
             content = pickle.load(_file)
         return content
 
     def save_notes(self, data):
+        """ Method for save notes
+        """
         self.save_to_file(self.NOTES, data)
 
     def read_notes(self):
+        """ Method for read notes
+        """
         try:
             return self.read_from_file(self.NOTES)
         except FileNotFoundError:
             return Notes()  # TODO: Class not exist, change name if it will be different name
 
     def save_contacts(self, data):
+        """ Method for save contacts
+        """
         self.save_to_file(self.CONTACTS, data)
 
     def read_contacts(self):
+        """ Method for read notes
+        """
         try:
             return self.read_from_file(self.CONTACTS)
         except FileNotFoundError:
@@ -207,6 +235,8 @@ class CommandCompleter:
         self.matches = []
 
     def complete(self, text, state):
+        """ Method for autocomplete
+        """
         response = None
         if state == 0:
             if text:
@@ -240,8 +270,16 @@ class Commands:
 
     @classmethod
     def all_keys(cls):
+        """ Show list of all names of variables in Class
+        :return: names
+        :rtype: list
+        """
         return [_ for _ in dir(Commands) if not _.startswith('_') and _.isupper()]
 
     @classmethod
     def all_values(cls):
+        """ Show list of all values of variables in Class
+        :return: values
+        :rtype: list
+        """
         return [getattr(cls, _) for _ in cls.all_keys()]

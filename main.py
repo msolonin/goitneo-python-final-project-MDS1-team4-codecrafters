@@ -345,6 +345,7 @@ def main():
         ° close/exit""")
     while True:
         readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.set_completer_delims(' ')
         readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
