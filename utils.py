@@ -21,8 +21,8 @@ def input_error(func):
             return "Could not show, list of birthdays empty"
         except ValueError:
             return "Please add command"
-        except Exception as e:
-            print(f"Unexpected action: in def {func.__name__}()")
+        except Exception as ex:
+            print(f"Unexpected exception {ex}: in def {func.__name__}()")
     return wrapper
 
 
