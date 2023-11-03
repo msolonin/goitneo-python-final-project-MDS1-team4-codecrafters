@@ -395,8 +395,8 @@ def add_tags(notes: Notes, note_name: str, *args):
     """
     :param notes: notes object
     :type notes: Notes
-    :param tag_name: Name of tags separated by whitespace
-    :type tag_name: str
+    :param note_name:  Name of note
+    :type note_name: str
     :return: Tags added
     :rtype: str
     """
@@ -466,7 +466,6 @@ def find_notes_by_tag(notes: Notes, tag_name: str):
             print(f"Tags: {', '.join(data['tags'])}")
             print(f"Text: {data['text']}\n")
     
-
 
 @input_error
 def sort_notes(notes: Notes):
