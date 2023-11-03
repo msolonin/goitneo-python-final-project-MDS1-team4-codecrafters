@@ -540,6 +540,13 @@ def main():
         ° show-email <name>
         ° edit <name>
         ° delete-profile <name>
+        ° add-note <name of the note> <text>
+        ° add-tags <name of the note> <tags>
+        ° find-note <name of the note>
+        ° delete-note <name of the note>
+        ° edit-note <name of the note> <new text>
+        ° find-by-tag <tag>
+        ° show-sorted-notes
         ° close/exit""")
     while True:
         readline.set_completer(CommandCompleter(Commands.all_values()).complete)
@@ -584,7 +591,7 @@ def main():
         elif command == Commands.ADD_TAGS:
             print(add_tags(notes, *args))
         elif command == Commands.EDIT_NOTE:
-            edit_note(notes, *args)
+            print(edit_note(notes, *args))
         elif command == Commands.FIND_NOTE:
             print(find_note(notes, *args))
         elif command == Commands.DELETE_NOTE:
