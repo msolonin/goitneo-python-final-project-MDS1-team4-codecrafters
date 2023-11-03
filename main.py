@@ -44,6 +44,8 @@ def find_contact(contacts: AddressBook, user_input: str):
                 record, 'phone') and record.phone is not None else ""
             user_info += f", address: {record.address.value}" if hasattr(
                 record, 'address') and record.address is not None else ""
+            user_info += f", email: {record.email.value}" if hasattr(
+                record, 'email') and record.email is not None else ""
             if user_input.lower() in user_info.lower():
                 list_of_users.append(user_info)
             else:
@@ -85,10 +87,11 @@ def _get_phone_number(phone: str):
         return ''.join(_phone)
     else:
         return None
-    
+
 
 def _get_valid_email(email: str):
-    _email = re.findall(r"[A-Za-z0-9!#$%&'r;+-.=?^^_`{}½~]+@[A-Za-z0-9]+(\.[A-Za-z]{2,})+", email)
+    _email = re.findall(
+        r"[A-Za-z0-9!#$%&'r;+-.=?^^_`{}½~]+@[A-Za-z0-9]+(\.[A-Za-z]{2,})+", email)
     _len = len(email)
     if _len <= EMAIL_MAX_LEN:
         return ''.join(_email)
@@ -336,7 +339,7 @@ def birthdays(contacts: AddressBook):
             return "No birthdays on next week"
     else:
         return "Empty birthday list"
-    
+
 
 @input_error
 def edit_record(contacts: AddressBook, name: str):
@@ -552,7 +555,8 @@ def main():
         ° show-sorted-notes
         ° close/exit""")
     while True:
-        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.set_completer(CommandCompleter(
+            Commands.all_values()).complete)
         readline.set_completer_delims(' ')
         readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
