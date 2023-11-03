@@ -322,7 +322,7 @@ class Commands:
     ADD_EMAIL = 'add-email'
     SHOW_EMAIL = 'show-email'
     CHANGE_EMAIL = 'change-email'
-    DELETE = 'delete'
+    DELETE = 'delete-profile'
     EDIT = 'edit'
     CLOSE = 'close'
     EXIT = 'exit'

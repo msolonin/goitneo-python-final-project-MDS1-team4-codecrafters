@@ -348,7 +348,7 @@ def edit_record(contacts: AddressBook, name: str):
     :return: str representation of cmd
     :rtype: str
     """
-    if find_contact(contacts, name):
+    if contacts.data.get(name):
         user_input = input(f"""What do you want to edit for {name}:
             ° phone <new phone>
             ° birthday <new birthday>
@@ -527,20 +527,17 @@ def main():
     Available commands:
         ° hello
         ° add <name> <phone number>
-        ° change <name> <new phone number>
         ° phone <name>
         ° all
         ° find <name/phone/birthday/address/email> (at least 3 char)
         ° add-birthday <name> <birthday(in format DD.MM.YYYY)>
         ° show-birthday <name>        
         ° birthdays
-        ° upcoming_birthday <number_of_days>
+        ° upcoming-birthday <number_of_days>
         ° add-address <name> <address>
         ° show-address <name>
-        ° change-address <name> <new address>
         ° add-email <name> <email>
         ° show-email <name>
-        ° change-email <name> <new email>
         ° edit <name>
         ° delete-profile <name>
         ° close/exit""")
@@ -558,8 +555,6 @@ def main():
             print("How can I help you?")
         elif command == Commands.ADD:
             print(add_phone(contacts, *args))
-        elif command == Commands.CHANGE:
-            print(change_phone(contacts, *args))
         elif command == Commands.PHONE:
             print(get_phone(contacts, *args))
         elif command == Commands.ALL:
@@ -580,14 +575,10 @@ def main():
             print(add_address(contacts, *args))
         elif command == Commands.SHOW_ADDRESS:
             print(get_address(contacts, *args))
-        elif command == Commands.CHANGE_ADDRESS:
-            print(change_address(contacts, *args))
         elif command == Commands.ADD_EMAIL:
             print(add_email(contacts, *args))
         elif command == Commands.SHOW_EMAIL:
             print(get_email(contacts, *args))
-        elif command == Commands.CHANGE_EMAIL:
-            print(change_email(contacts, *args))
         elif command == Commands.ADD_NOTE:
             print(add_note(notes, *args))
         elif command == Commands.ADD_TAGS:
