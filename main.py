@@ -391,7 +391,7 @@ def add_note(notes: Notes, name: str, *args):
 
 
 @input_error
-def add_tags(notes: Notes, tag_name: str, *args):
+def add_tags(notes: Notes, note_name: str, *args):
     """
     :param notes: notes object
     :type notes: Notes
@@ -401,9 +401,9 @@ def add_tags(notes: Notes, tag_name: str, *args):
     :rtype: str
     """
     tags = ' '.join(args)
-    notes.add_tags(tag_name, tags)
+    notes.add_tags(note_name, tags)
     pickle.save_notes(notes)
-    return f'Tags {tag_name} added'
+    return f'Tags for note {note_name} added'
 
 
 @input_error
@@ -431,7 +431,7 @@ def delete_note(notes: Notes, name: str):
     """
     notes.delete_note(name)
     pickle.save_notes(notes)
-    return f'Tags {name} deleted'
+    return f'Note {name} deleted'
 
 
 @input_error
@@ -458,10 +458,14 @@ def find_notes_by_tag(notes: Notes, tag_name: str):
     :return: sorted notes by tag
     :rtype: notes str representation
     """
-    for name, data in notes.find_notes_by_tag(tag_name).items():
-        print(f"Note's name: {name}")
-        print(f"Tags: {', '.join(data['tags'])}")
-        print(f"Text: {data['text']}\n")
+    if len(notes.find_notes_by_tag(tag_name)) == 0:
+        print('Teg not found')
+    else:
+        for name, data in notes.find_notes_by_tag(tag_name).items():
+            print(f"Note's name: {name}")
+            print(f"Tags: {', '.join(data['tags'])}")
+            print(f"Text: {data['text']}\n")
+    
 
 
 @input_error
