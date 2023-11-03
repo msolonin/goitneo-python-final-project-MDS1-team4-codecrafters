@@ -468,7 +468,7 @@ def find_notes_by_tag(notes: Notes, tag_name: str):
             print(f"Note's name: {name}")
             print(f"Tags: {', '.join(data['tags'])}")
             print(f"Text: {data['text']}\n")
-    
+
 
 @input_error
 def sort_notes(notes: Notes):
@@ -484,23 +484,23 @@ def sort_notes(notes: Notes):
         print(f"Text: {data['text']}\n")
 
 
+@input_error
 def upcoming_birthday(contacts: AddressBook, n_of_days: str):
     """ Method to show all birthdays in n days if exist
     :return: names of users who has birthday in n days
     :rtype: str
     """
-
     today = datetime.today().date()
     days = timedelta(days=int(n_of_days))
     upcoming_birthdays = today + days
-    if contacts.data:
+    if contacts:
         birthdays_on_that_day = []
-        for user in contacts.data.values():
-            birthday = user.birthday.date_object
-            birthday_this_year = birthday.replace(year=today.year)
-            if upcoming_birthdays == birthday_this_year:
-                birthdays_on_that_day.append(str(user.name))
-
+        for user in contacts.values():
+            if hasattr(user, 'birthday') and user.birthday is not None:
+                birthday = user.birthday.date_object
+                birthday_this_year = birthday.replace(year=today.year)
+                if upcoming_birthdays == birthday_this_year:
+                    birthdays_on_that_day.append(str(user.name))
         if birthdays_on_that_day:
             formatted_date = upcoming_birthdays.strftime("%d.%m.%Y")
             return f"{', '.join(birthdays_on_that_day)} have birthday on {formatted_date}"
