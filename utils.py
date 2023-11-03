@@ -21,7 +21,7 @@ def input_error(func):
             return "Could not show, list of birthdays empty"
         except ValueError:
             return "Please add command"
-        except Exception:
+        except Exception as e:
             print(f"Unexpected action: in def {func.__name__}()")
     return wrapper
 
@@ -170,7 +170,7 @@ class Record:
         birthday = ''
         if self.birthday:
             birthday = f" birthday: {str(self.birthday)}, "
-        return f"Contact name: {self.name.value},{birthday} phone: {self.phone}"
+        return f"Contact name: {self.name.value},{birthday} phone: {self.phone}, address: {self.address}"
 
 
 class Notes(UserDict):
@@ -311,6 +311,7 @@ class Commands:
     CHANGE = 'change'
     PHONE = 'phone'
     ALL = 'all'
+    FIND = 'find'
     ADD_BIRTHDAY = 'add-birthday'
     SHOW_BIRTHDAY = 'show-birthday'
     BIRTHDAYS = 'birthdays'
