@@ -175,16 +175,25 @@ class Record:
 
 class Notes(UserDict):
     def add_note(self, name, text):
+        """ Method for add note
+        """
         self.data[name] = {"text": text, "tags": []}
 
     def add_tags(self, name, tags):
+        """ Method for add tags
+        """
         self.data[name]["tags"] += tags.split(" ")
 
     def find_note(self, name):
+        """ Method for find note
+        """
         if name in self.data:
-            return f"Note`s name: {name},\ntags: {' '.join(t for t in self.data[name]['tags'])};\ntext: {self.data[name]['text']}"
+            return f"Note`s name: {name},\ntags: {' '.join(t for t in self.data[name]['tags'])};" \
+                   f"\ntext: {self.data[name]['text']}\n"
 
     def delete_note(self, name):
+        """ Method for delete note
+        """
         if name in self.data:
             del self.data[name]
             return True
@@ -192,6 +201,8 @@ class Notes(UserDict):
             return False
 
     def edit_note(self, name, new_text):
+        """ Method for edit note
+        """
         if name in self.data:
             self.data[name]["text"] = new_text
             return True
@@ -199,6 +210,8 @@ class Notes(UserDict):
             return False
 
     def find_notes_by_tag(self, tag):
+        """ Method for find notes by tag
+        """
         matching_notes = dict()
         for name, data in self.data.items():
             tags = data["tags"]
@@ -207,6 +220,8 @@ class Notes(UserDict):
         return matching_notes
 
     def sort_notes(self):
+        """ Method for sort notes
+        """
         sorted_notes = sorted(
             self.data.items(), key=lambda item: (-len(item[1]["tags"]), item[0])
         )
@@ -252,7 +267,7 @@ class Pickle:
         try:
             return self.read_from_file(self.NOTES)
         except FileNotFoundError:
-            return Notes()  # TODO: Class not exist, change name if it will be different name
+            return Notes()
 
     def save_contacts(self, data):
         """ Method for save contacts

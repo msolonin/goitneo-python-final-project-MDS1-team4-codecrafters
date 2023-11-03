@@ -5,7 +5,7 @@ For works with Address book
 """
 import re
 import calendar
-#import readline
+import readline
 from datetime import datetime
 from utils import input_error
 from utils import Birthday
@@ -51,7 +51,7 @@ def _get_phone_number(phone: str):
     :return: phone number or None
     :rtype: str or None
     """
-    _phone = re.findall(r"[\+\(]?[1-9]", phone)
+    _phone = re.findall(r"[\+\(]?[0-9]", phone)
     _len = len(_phone)
     if _len == TELEPHONE_NUMBER_LEN:
         return ''.join(_phone)
@@ -311,50 +311,107 @@ def birthdays(contacts):
 
 
 @input_error
-def add_note(notes, name: str, *args):
+def add_note(notes: Notes, name: str, *args):
+    """ Method for add Note
+    :param notes: notes object
+    :type notes: Notes
+    :param name: Name of note
+    :type name: str
+    :return: Note added
+    :rtype: str
+    """
     text = ' '.join(args)
     notes.add_note(name, text)
     pickle.save_notes(notes)
-    return 'Note added'
+    return f'Note {name} added'
+
 
 @input_error
-def add_tags(notes, name: str, *args):
+def add_tags(notes: Notes, tag_name: str, *args):
+    """
+    :param notes: notes object
+    :type notes: Notes
+    :param tag_name: Name of tags separated by whitespace
+    :type tag_name: str
+    :return: Tags added
+    :rtype: str
+    """
     tags = ' '.join(args)
-    notes.add_tags(name, tags)
+    notes.add_tags(tag_name, tags)
     pickle.save_notes(notes)
-    return 'Tags added'
+    return f'Tags {tag_name} added'
+
 
 @input_error
-def find_note(notes, name: str):
+def find_note(notes: Notes, name: str):
+    """ Method for find note
+    :param notes: notes object
+    :type notes: Notes
+    :param name: Name of note
+    :type name: str
+    :return: notes str representation
+    :rtype: str
+    """
     return notes.find_note(name)
 
-@input_error
-def delete_note(notes, name: str):
-    notes.delete_note(name)
-    pickle.save_notes(notes)
-    return 'Tags added'
 
 @input_error
-def edit_note(notes, name: str,  *args):
+def delete_note(notes: Notes, name: str):
+    """ Method for delete note
+    :param notes: notes object
+    :type notes: Notes
+    :param name: Name of note
+    :type name: str
+    :return:
+    :rtype:
+    """
+    notes.delete_note(name)
+    pickle.save_notes(notes)
+    return f'Tags {name} deleted'
+
+
+@input_error
+def edit_note(notes: Notes, name: str,  *args):
+    """ Method for edit note
+    :param notes: notes object
+    :type notes: Notes
+    :param name: Name of note
+    :type name: str
+    """
     new_text = ' '.join(args)
     notes.edit_note(name, new_text)
     pickle.save_notes(notes)
+    return f'Note {name} edited'
+
 
 @input_error
-def find_notes_by_tag(notes, tag: str):
-    for name, data in notes.find_notes_by_tag(tag).items():
+def find_notes_by_tag(notes: Notes, tag_name: str):
+    """ Method for find note
+    :param notes: notes object
+    :type notes: Notes
+    :param tag_name: Name of tag
+    :type tag_name: str
+    :return: sorted notes by tag
+    :rtype: notes str representation
+    """
+    for name, data in notes.find_notes_by_tag(tag_name).items():
         print(f"Note's name: {name}")
         print(f"Tags: {', '.join(data['tags'])}")
-        print(f"Text: {data['text']}")
-        print() 
+        print(f"Text: {data['text']}\n")
+
 
 @input_error
-def sort_notes(notes):
+def sort_notes(notes: Notes):
+    """ Method for sort notes
+    :param notes: notes object
+    :type notes: Notes
+    :return: sorted notes
+    :rtype: notes str representation
+    """
     for name, data in notes.sort_notes().items():
         print(f"Note's name: {name}")
         print(f"Tags: {', '.join(data['tags'])}")
-        print(f"Text: {data['text']}")
-        print() 
+        print(f"Text: {data['text']}\n")
 
 
 @input_error
@@ -393,9 +450,9 @@ def main():
         ° change-email <name> <new email>
         ° close/exit""")
     while True:
-        #readline.set_completer(CommandCompleter(Commands.all_values()).complete)
-        #readline.set_completer_delims(' ')
-        #readline.parse_and_bind('tab: complete')
+        readline.set_completer(CommandCompleter(Commands.all_values()).complete)
+        readline.set_completer_delims(' ')
+        readline.parse_and_bind('tab: complete')
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
@@ -433,15 +490,15 @@ def main():
         elif command == Commands.ADD_NOTE:
             print(add_note(notes, *args))
         elif command == Commands.ADD_TAGS:
-            add_tags(notes, *args)
+            print(add_tags(notes, *args))
         elif command == Commands.EDIT_NOTE:
-            edit_note(notes,*args)
+            edit_note(notes, *args)
         elif command == Commands.FIND_NOTE:
-            print(find_note(notes,*args))
+            print(find_note(notes, *args))
         elif command == Commands.DELETE_NOTE:
-            delete_note(notes,*args)
+            print(delete_note(notes, *args))
         elif command == Commands.FIND_NOTES_BY_TAGS:
-            print(find_notes_by_tag(notes, *args))
+            find_notes_by_tag(notes, *args)
         elif command == Commands.SORT_NOTES:
             sort_notes(notes)
         else:
