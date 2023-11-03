@@ -15,19 +15,45 @@ from utils import CommandCompleter
 from utils import Commands
 
 TELEPHONE_NUMBER_LEN = 10
+FINDER_INPUT_LEN = 3
 pickle = Pickle()
 
 
 @input_error
-def find(contacts, name: str):
-    """ getter for get object Record from dict by name
+def find(contacts, user_input: str):
+    """ user search  
     :param contacts: contacts object
-    :param name: name of user
+    :param user_input: input which user enters to look for a contact
     :type name: str
-    :return: Record object
-    :rtype: object
+    :return: str with search result
+    :rtype: str
     """
-    return contacts.get(name)
+    list_of_users = []
+
+    if len(user_input) >= FINDER_INPUT_LEN:
+        for user_name, record in contacts.items():
+            user_info = f"Contact name: {user_name}"
+            # code in lines 37-43 checks if the contact has the attribute, and if yes, if adds it to the user_info str
+            user_info += f", {record.birthday.value}" if hasattr(
+                record, 'birthday') and record.birthday is not None else ""
+            user_info += f", phone: {record.phone.value}" if hasattr(
+                record, 'phone') and record.phone is not None else ""
+            user_info += f", address: {record.address.value}" if hasattr(
+                record, 'address') and record.address is not None else ""
+            # user_info += f", address: {record.email.value}" if hasattr(record, 'email') and record.email is not None else ""
+
+            if user_input.lower() in user_info.lower():
+                list_of_users.append(user_info)
+            else:
+                continue
+    else:
+        return ("Enter 3 and more charachters.")
+
+    if list_of_users:
+        final_list = '\n'.join(list_of_users)
+        return final_list
+    else:
+        return "Match not found"
 
 
 @input_error
@@ -271,6 +297,7 @@ def main():
         ° change <name> <new phone number>
         ° phone <name>
         ° all
+        ° find <name/phone/birthday/address/email> (at least 3 char)
         ° add-birthday <name> <birthday(in format DD.MM.YYYY)>
         ° show-birthday <name>        
         ° birthdays
@@ -300,6 +327,8 @@ def main():
             print(get_phone(contacts, *args))
         elif command == Commands.ALL:
             print(get_all(contacts))
+        elif command == Commands.FIND:
+            print(find(contacts, *args))
         elif command == Commands.DELETE:
             print(delete(contacts, *args))
         elif command == Commands.ADD_BIRTHDAY:
