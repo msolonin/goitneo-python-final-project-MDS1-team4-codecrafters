@@ -111,13 +111,24 @@ def add_phone(contacts: AddressBook, name: str, phone: str):
     :rtype: str
     """
     _phone = _get_phone_number(phone)
+    _command_type = "added"
     if _phone:
+        if contacts.get(name):
+            _commands = ["yes", "no"]
+            print(f"Do you want update existing contact {name}:\n        ° yes\n        ° no")
+            user_input = input("Choose 'yes' or 'no' >>> ")
+            if user_input not in _commands:
+                return f"Wrong command, it should be {_commands}. Update canceled ..."
+            if user_input.lower() == "no":
+                return f"Cancel contact {name} updating ..."
+            else:
+                _command_type = "changed"
         phone = ''.join(_phone)
         record = Record(name)
         record.add_phone(phone)
         contacts.update(**{record.name.value: record})
         pickle.save_contacts(contacts)
-        return f"Contact: {name} : {phone} added"
+        return f"Contact: {name} : {phone} {_command_type}"
     else:
         return f"Phone: {phone} is not correct it should contain {str(TELEPHONE_NUMBER_LEN)} digits"
 
