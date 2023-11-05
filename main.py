@@ -549,7 +549,6 @@ def main():
         ° find <name/phone/birthday/address/email> (at least 3 char)
         ° add-birthday <name> <birthday(in format DD.MM.YYYY)>
         ° show-birthday <name>        
-        ° birthdays
         ° upcoming-birthday <number_of_days>
         ° add-address <name> <address>
         ° show-address <name>
@@ -592,8 +591,6 @@ def main():
             print(add_birthday(contacts, *args))
         elif command == Commands.SHOW_BIRTHDAY:
             print(show_birthday(contacts, *args))
-        elif command == Commands.BIRTHDAYS:
-            print(birthdays(contacts))
         elif command == Commands.UPCOMING_BIRTHDAY:
             print(upcoming_birthday(contacts, *args))
         elif command == Commands.ADD_ADDRESS:
